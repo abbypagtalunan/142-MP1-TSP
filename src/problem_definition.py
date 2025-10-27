@@ -74,10 +74,24 @@ def visualize(coordinates, distance_matrix, k=None, show_labels=True):
     plt.grid(True)
     plt.show()
 
-if __name__ == "__main__":
-    coordinates = generate_coordinates(n_cities=10, grid_size=100)
-    distance_matrix = generate_distance_matrix(coordinates)
-    visualize(coordinates, distance_matrix)
+def pd_runner(k):
+    """
+    Usage of the first k items for each of the k-instance of the problem.
+    """
+    coordinates_k = generate_coordinates(k)
+    distance_matrix_k = generate_distance_matrix(coordinates_k)
+    visualize(coordinates_k, distance_matrix_k, k=k)
+
+
+# def pd_runner(k):
+#     """
+#     Usage of the first k items for each of the k-instance of the problem.
+#     """
+#     coordinates = generate_coordinates()
+#     for k in [5, 10, 15, 20, 30]:
+#         coords_k = coordinates[:k] 
+#         distance_matrix_k = generate_distance_matrix(coords_k)
+#         visualize(coords_k, distance_matrix_k, k=k)
 
 #for other possible imports!
 #if __name__ == "__dynamic_programming__":...
