@@ -1,5 +1,92 @@
+import math
+import matplotlib.pyplot as plt
 from src import problem_definition as pd
 
-# Generation of Cities and Distance Matrix Call
-# Small instances (5 ≤ n ≤ 15) for exhaustive search algorithms
-pd.pd_runner(15)
+#   EXHAUSTIVE SEARCH USING DECREASE-BY-ONE METHOD
+
+# from Geeks4geeks
+# Computes total cost of the given tour (including return to start).
+def calculate_tour_cost(tour, distance_matrix):
+    total_cost = 0
+    for i in range(len(tour) - 1):
+        total_cost += distance_matrix[tour[i]][tour[i + 1]]
+    total_cost += distance_matrix[tour[-1]][tour[0]]  
+    return total_cost
+
+# Recursive function to generate all permutations using Decrease-by-One method
+def generate_permutations(seq):
+    if len(seq) == 1:
+        return [seq]
+
+    perms = []
+    # Decrease by one: generate permutations of n-1 elements
+    # Pick one element (start city) & generate permutations of the rest
+    for i in range(len(seq)):
+        remaining = seq[:i] + seq[i+1:]
+        for p in generate_permutations(remaining):
+            perms.append([seq[i]] + p)
+    return perms
+
+# Exhaustive TSP using Decrease-by-One permutation generation
+def exhaustive_tsp_decrease_by_one(distance_matrix):
+    n = len(distance_matrix)
+    cities = list(range(n))
+    start_city = cities[0]
+    other_cities = cities[1:]
+
+    best_tour = None
+    best_cost = math.inf
+
+    all_perms = generate_permutations(other_cities)
+
+    for perm in all_perms:
+        tour = [start_city] + perm
+        cost = calculate_tour_cost(tour, distance_matrix)
+        if cost < best_cost:
+            best_cost = cost
+            best_tour = tour
+
+    return best_tour, best_cost
+
+# Visualization of the best tour
+def visualize_tour(coordinates, distance_matrix, tour):
+    plt.figure(figsize=(8, 8))
+    n = len(coordinates)
+
+    # Draw edges of best tour
+    for i in range(len(tour)):
+        city1 = tour[i]
+        city2 = tour[(i + 1) % n]
+        x1, y1 = coordinates[city1]
+        x2, y2 = coordinates[city2]
+        plt.plot([x1, x2], [y1, y2], 'orange', linewidth=2, zorder=2)
+
+    # Plot city points
+    plt.scatter(coordinates[:, 0], coordinates[:, 1], color='darkgreen', zorder=3)
+    for i, (x, y) in enumerate(coordinates):
+        plt.text(x + 1, y + 1, f"{i}", fontsize=10, color='black')
+
+    plt.title(f"Best TSP Tour (Cost: {calculate_tour_cost(tour, distance_matrix)})")
+    plt.xlabel("X")
+    plt.ylabel("Y")
+    plt.grid(True)
+    plt.show()
+
+# Runner function for Exhaustive Search
+def es_runner(k):
+    print(f"\n=== EXHAUSTIVE SEARCH (Decrease-by-One) for TSP with {k} cities ===")
+    coordinates = pd.generate_coordinates(k)
+    distance_matrix = pd.generate_distance_matrix(coordinates)
+
+    best_tour, best_cost = exhaustive_tsp_decrease_by_one(distance_matrix)
+    print("\nBest Tour Found:", best_tour)
+    print("Minimum Tour Cost:", best_cost)
+
+    visualize_tour(coordinates, distance_matrix, best_tour)
+
+# Main execution
+if __name__ == "__main__" or __name__ == "src.exhaustive_search":
+    # Generate 15 cities (visual only)
+    pd.pd_runner(15)
+    # Run exhaustive search for smaller instance 
+    es_runner(10)
