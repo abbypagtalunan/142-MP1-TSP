@@ -74,26 +74,24 @@ def visualize_tour(coordinates, distance_matrix, tour):
     plt.show()
 
 # Runner function for Exhaustive Search
-def es_runner(k):
+def es_runner(all_coordinates, k):
     print(f"\n=== EXHAUSTIVE SEARCH (Decrease-by-One) for TSP with {k} cities ===")
-    coordinates = pd.generate_coordinates(k)
-    distance_matrix = pd.generate_distance_matrix(coordinates)
-
+    # Use only the first k cities from the pregenerated set
+    coordinates_k = all_coordinates[:k]
+    distance_matrix = pd.generate_distance_matrix(coordinates_k)
+    
     start_time = time.perf_counter()
-
     best_tour, best_cost = exhaustive_tsp_decrease_by_one(distance_matrix)
-
     end_time = time.perf_counter()
     elapsed_time = end_time - start_time
-
+    
     print("\nBest Tour Found:", best_tour)
-    print("Minimum Tour Cost:", best_cost)
+    print ("Minimum Tour Cost:", best_cost)
     print(f"Execution Time: {elapsed_time:.6f} seconds")
-
-    visualize_tour(coordinates, distance_matrix, best_tour)
+    visualize_tour(coordinates_k, distance_matrix, best_tour)
 
 # Main execution
 if __name__ == "__main__" or __name__ == "src.exhaustive_search":
-    pd.pd_runner(15)
+    all_coordinates = pd.pd_runner(10)
     # Run exhaustive search for smaller instance 
-    es_runner(5)
+    es_runner(all_coordinates, 10)

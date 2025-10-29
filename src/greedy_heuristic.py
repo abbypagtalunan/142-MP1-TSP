@@ -18,7 +18,6 @@ def calculate_distance(p1: Tuple[float, float], p2: Tuple[float, float]) -> floa
     x2, y2 = p2
     return math.hypot(x2 - x1, y2 - y1)
 
-
 # --- Nearest Neighbor core
 def get_nearest_neighbor(city: int, matrix: np.ndarray, visited: set[int]) -> Tuple[float, int]:
     n = matrix.shape[0]
@@ -72,20 +71,19 @@ def plot_path(coords: np.ndarray, path: List[int]) -> None:
     plt.tight_layout()
     plt.show()
 
-def gh_runner(n_cities: int = 30, start: int = 0) -> None:
+def gh_runner(all_coordinates: np.ndarray, k: int, n_cities: int = 30, start: int = 0) -> None:
     """
     Generates cities and distance matrix via src/problem_definition.py,
     then solves TSP with Nearest Neighbor.
     """
-    # From your problem definition 
+    coordinates_k = all_coordinates[:k]
+    distance_matrix = pd.generate_distance_matrix(coordinates_k)
 
     start_time = time.perf_counter()
-    coordinates: np.ndarray = pd.generate_coordinates(n_cities)
-    distance_matrix: np.ndarray = pd.generate_distance_matrix(coordinates)
+    path, total_cost = nearest_neighbor_path(distance_matrix, start=start)
     end_time = time.perf_counter()
     elapsed_time = end_time - start_time
 
-    path, total_cost = nearest_neighbor_path(distance_matrix, start=start)
 
     print("\n--- Nearest-Neighbor TSP ---")
     print(f"Number of cities: {n_cities}")
@@ -93,9 +91,9 @@ def gh_runner(n_cities: int = 30, start: int = 0) -> None:
     print(f"Path (visit order): {path}")
     print(f"Total tour length (incl. return): {total_cost:.4f}")
     print(f"Execution Time: {elapsed_time:.6f} seconds")
-    plot_path(coordinates, path)
+    plot_path(coordinates_k, path)
 
 
 if __name__ == "__main__":
-    pd.pd_runner(30)  # Visualize 30 cities
-    gh_runner(n_cities=30, start=0)
+    all_coordinates = pd.pd_runner(30)  # Visualize 30 cities
+    gh_runner(all_coordinates, k=30, start=0)

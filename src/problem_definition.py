@@ -82,7 +82,7 @@ def pd_runner(k, all_coordinates=None):
         all_coordinates = generate_coordinates(30)
 
     coordinates_k = all_coordinates[:k]
-    distance_matrix_k = generate_distance_matrix(coordinates_k)
-    visualize(coordinates_k, distance_matrix_k, k=k)
+    distance_matrix = generate_distance_matrix(coordinates_k)
+    visualize(coordinates_k, distance_matrix, k=k)
 
     return all_coordinates

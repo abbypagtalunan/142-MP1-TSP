@@ -1,3 +1,4 @@
+import time
 import matplotlib.pyplot as plt
 from src import problem_definition as pd
 
@@ -53,7 +54,7 @@ def btour(tour, n):
     return path
 
 # Runner function
-def dp_runner(dmatrix):
+def dp_bhk(dmatrix):
     n = len(dmatrix)
     # Initialize memoization table with -1 (uncomputed states)
     memo = [[-1] * (1 << n) for _ in range(n)]
@@ -91,20 +92,26 @@ def visualize_tour(coordinates, dmatrix, tour):
     plt.grid(True)
     plt.show()
 
-def dp_main(k):
+def dp_runner(all_coordinates, k):
     print(f"\n=== DYNAMIC PROGRAMMING (Bellman-Held-Karp) for TSP with {k} cities ===")
-    coordinates = pd.generate_coordinates(k)
-    distance_matrix = pd.generate_distance_matrix(coordinates)
+    distance_matrix = pd.generate_distance_matrix(all_coordinates)
 
-    best_tour, best_cost = dp_runner(distance_matrix)
+    start_time = time.perf_counter()
+    best_tour, best_cost = dp_bhk(distance_matrix)
+    end_time = time.perf_counter()
+    elapsed_time = end_time - start_time
+
     print("\nBest Tour Found:", best_tour)
-    print("Minimum Tour Cost:", best_cost)
+    print ("Minimum Tour Cost:", best_cost)
+    print(f"Execution Time: {elapsed_time:.6f} seconds")
+    visualize_tour(all_coordinates, distance_matrix, best_tour)
 
-    visualize_tour(coordinates, distance_matrix, best_tour)
 
 # Main execution
 if __name__ == "__main__" or __name__ == "src.dynamic_programming":
     # Generate 30 cities
-    pd.pd_runner(30)
+    all_coordinates = pd.pd_runner(30)
     # Run Dynamic Programming Bellman-Held-Karp for generated cities
-    dp_main(20)
+    dp_runner(all_coordinates, 20)
+
+
