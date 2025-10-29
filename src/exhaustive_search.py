@@ -1,4 +1,5 @@
 import math
+import time
 import matplotlib.pyplot as plt
 from src import problem_definition as pd
 
@@ -78,9 +79,16 @@ def es_runner(k):
     coordinates = pd.generate_coordinates(k)
     distance_matrix = pd.generate_distance_matrix(coordinates)
 
+    start_time = time.perf_counter()
+
     best_tour, best_cost = exhaustive_tsp_decrease_by_one(distance_matrix)
+
+    end_time = time.perf_counter()
+    elapsed_time = end_time - start_time
+
     print("\nBest Tour Found:", best_tour)
     print("Minimum Tour Cost:", best_cost)
+    print(f"Execution Time: {elapsed_time:.6f} seconds")
 
     visualize_tour(coordinates, distance_matrix, best_tour)
 
@@ -89,4 +97,4 @@ if __name__ == "__main__" or __name__ == "src.exhaustive_search":
     # Generate 15 cities (visual only)
     pd.pd_runner(15)
     # Run exhaustive search for smaller instance 
-    es_runner(10)
+    es_runner(11)
