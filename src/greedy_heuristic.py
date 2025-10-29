@@ -6,6 +6,7 @@ Nearest-Neighbor (NN) TSP using src/problem_definition.py
 from __future__ import annotations
 import math
 import numpy as np
+import time
 import matplotlib.pyplot as plt
 from typing import List, Tuple
 from src import problem_definition as pd
@@ -77,8 +78,16 @@ def run_greedy_instance(n_cities: int = 30, start: int = 0) -> None:
     then solves TSP with Nearest Neighbor.
     """
     # From your problem definition (random generation lives there)
+
+    start_time = time.perf_counter()
+
     coordinates: np.ndarray = pd.generate_coordinates(n_cities)
+
     distance_matrix: np.ndarray = pd.generate_distance_matrix(coordinates)
+
+    end_time = time.perf_counter()
+
+    elapsed_time = end_time - start_time
 
     path, total_cost = nearest_neighbor_path(distance_matrix, start=start)
 
@@ -87,7 +96,7 @@ def run_greedy_instance(n_cities: int = 30, start: int = 0) -> None:
     print(f"Start city: {start}")
     print(f"Path (visit order): {path}")
     print(f"Total tour length (incl. return): {total_cost:.4f}")
-
+    print(f"Execution Time: {elapsed_time:.6f} seconds")
     plot_path(coordinates, path)
 
 
