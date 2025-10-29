@@ -72,7 +72,7 @@ def plot_path(coords: np.ndarray, path: List[int]) -> None:
     plt.tight_layout()
     plt.show()
 
-def run_greedy_instance(n_cities: int = 30, start: int = 0) -> None:
+def gh_runner(n_cities: int = 30, start: int = 0) -> None:
     """
     Generates cities and distance matrix via src/problem_definition.py,
     then solves TSP with Nearest Neighbor.
@@ -102,4 +102,4 @@ def run_greedy_instance(n_cities: int = 30, start: int = 0) -> None:
 
 if __name__ == "__main__":
     # Example run
-    run_greedy_instance(n_cities=30, start=0)
+    gh_runner(n_cities=30, start=0)
