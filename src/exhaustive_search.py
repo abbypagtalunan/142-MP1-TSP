@@ -94,7 +94,6 @@ def es_runner(k):
 
 # Main execution
 if __name__ == "__main__" or __name__ == "src.exhaustive_search":
-    # Generate 15 cities (visual only)
     pd.pd_runner(15)
     # Run exhaustive search for smaller instance 
-    es_runner(11)
+    es_runner(5)

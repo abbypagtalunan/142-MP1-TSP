@@ -77,16 +77,12 @@ def gh_runner(n_cities: int = 30, start: int = 0) -> None:
     Generates cities and distance matrix via src/problem_definition.py,
     then solves TSP with Nearest Neighbor.
     """
-    # From your problem definition (random generation lives there)
+    # From your problem definition 
 
     start_time = time.perf_counter()
-
     coordinates: np.ndarray = pd.generate_coordinates(n_cities)
-
     distance_matrix: np.ndarray = pd.generate_distance_matrix(coordinates)
-
     end_time = time.perf_counter()
-
     elapsed_time = end_time - start_time
 
     path, total_cost = nearest_neighbor_path(distance_matrix, start=start)
@@ -101,5 +97,5 @@ def gh_runner(n_cities: int = 30, start: int = 0) -> None:
 
 
 if __name__ == "__main__":
-    # Example run
+    pd.pd_runner(30)  # Visualize 30 cities
     gh_runner(n_cities=30, start=0)

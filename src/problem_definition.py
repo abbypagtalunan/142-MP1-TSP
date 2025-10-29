@@ -37,9 +37,9 @@ def generate_distance_matrix(coordinates):
     
     for i in range(n):
         for j in range(i + 1, n):
-            weight = math.floor(calculate_euclidean_distance(coordinates[i], coordinates[j]))
+            weight = round(calculate_euclidean_distance(coordinates[i], coordinates[j]))
             distance_matrix[i, j] = weight
-            distance_matrix[j, i] = weight  #Symmetric!!!!
+            distance_matrix[j, i] = weight
     print("\nDistance Matrix:")
     print(distance_matrix)
     return distance_matrix
@@ -74,24 +74,15 @@ def visualize(coordinates, distance_matrix, k=None, show_labels=True):
     plt.grid(True)
     plt.show()
 
-def pd_runner(k):
+def pd_runner(k, all_coordinates=None):
     """
-    Usage of the first k items for each of the k-instance of the problem.
+    Uses the first k coordinates from a pregenerated n=30 cities.
     """
-    coordinates_k = generate_coordinates(k)
+    if all_coordinates is None:
+        all_coordinates = generate_coordinates(30)
+
+    coordinates_k = all_coordinates[:k]
     distance_matrix_k = generate_distance_matrix(coordinates_k)
     visualize(coordinates_k, distance_matrix_k, k=k)
 
-
-# def pd_runner(k):
-#     """
-#     Usage of the first k items for each of the k-instance of the problem.
-#     """
-#     coordinates = generate_coordinates()
-#     for k in [5, 10, 15, 20, 30]:
-#         coords_k = coordinates[:k] 
-#         distance_matrix_k = generate_distance_matrix(coords_k)
-#         visualize(coords_k, distance_matrix_k, k=k)
-
-#for other possible imports!
-#if __name__ == "__dynamic_programming__":...
+    return all_coordinates
