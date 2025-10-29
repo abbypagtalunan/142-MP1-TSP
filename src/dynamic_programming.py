@@ -1,5 +1,110 @@
+import matplotlib.pyplot as plt
 from src import problem_definition as pd
 
-# Generation of Cities and Distance Matrix Call
-# Larger instances (up to n = 30 or more) for DP and greedy-heuristic algorithm
-pd.pd_runner(30)
+
+# DYNAMIC PROGRAMMING BELLMAN-HELD-KARP ALGORITHM (Top-Down Recursive with Memoization) 
+
+# from Geeks for Geeks
+
+# Dynamic Programming Bellman-Held-Karp  
+# For solving Traveling Salesman Problem
+def dp_bhk(mask, curr, n, cost, memo, tour):
+    # Base Case: If all cities are visited, 
+    #               return the cost to return 
+    #               to the starting city (0)
+    if mask == (1 << n) - 1:
+        return cost[curr][0]
+    
+    # If the value has been computed already,
+    # return it from the memo table
+    if memo[curr][mask] != -1: 
+        return memo[curr][mask]
+    
+    ans = float('inf')
+    next = -1
+
+    # Visiting every city that has not been visited yet
+    for i in range(n):
+        if (mask & (1 << i)) == 0:   
+            # If city has not been visited,
+            # visit city i and update the mask
+            ncost = cost[curr][i] + dp_bhk(mask | (1 << i), i, n, cost, memo, tour)
+            if ncost < ans:
+                ans = ncost
+                next = i
+
+    memo[curr][mask] = ans
+    tour[curr][mask] = next
+    return ans
+
+# Constructing best (optimal) tour from tour table
+def btour(tour, n):
+    mask = 1
+    curr = 0
+    path = [0]
+    while True:
+        i = tour[curr][mask]
+        if i == -1 or i is None:
+            break
+        path.append(i)
+        mask |= (1 << i)
+        curr = i
+    path.append(0)
+    return path
+
+# Runner function
+def dp_runner(dmatrix):
+    n = len(dmatrix)
+    # Initialize memoization table with -1 (uncomputed states)
+    memo = [[-1] * (1 << n) for _ in range(n)]
+    tour = [[-1] * (1 << n) for _ in range(n)]
+
+    # Start from city 0, with only city 0 visited initially (mask = 1)
+    best_cost = dp_bhk(1, 0, n, dmatrix, memo, tour)
+    best_tour = btour(tour, n)
+    return best_tour, best_cost
+
+def calculate_tour_cost(tour, dmatrix):
+    total = 0
+    for i in range(len(tour) - 1):
+        total += dmatrix[tour[i]][tour[i + 1]]
+    return total
+
+def visualize_tour(coordinates, dmatrix, tour):
+    plt.figure(figsize=(8, 8))
+    n = len(coordinates)
+
+    for i in range(len(tour) - 1):
+        city1 = tour[i]
+        city2 = tour[i + 1]
+        x1, y1 = coordinates[city1]
+        x2, y2 = coordinates[city2]
+        plt.plot([x1, x2], [y1, y2], 'orange', linewidth=2, zorder=2)
+
+    plt.scatter(coordinates[:, 0], coordinates[:, 1], color='darkgreen', zorder=3)
+    for i, (x, y) in enumerate(coordinates):
+        plt.text(x + 1, y + 1, f"{i}", fontsize=10, color='black')
+
+    plt.title(f"Best TSP Tour (Cost: {calculate_tour_cost(tour, dmatrix)})")
+    plt.xlabel("X")
+    plt.ylabel("Y")
+    plt.grid(True)
+    plt.show()
+
+def dp_main(k):
+    print(f"\n=== DYNAMIC PROGRAMMING (Bellman-Held-Karp) for TSP with {k} cities ===")
+    coordinates = pd.generate_coordinates(k)
+    distance_matrix = pd.generate_distance_matrix(coordinates)
+
+    best_tour, best_cost = dp_runner(distance_matrix)
+    print("\nBest Tour Found:", best_tour)
+    print("Minimum Tour Cost:", best_cost)
+
+    visualize_tour(coordinates, distance_matrix, best_tour)
+
+# Main execution
+if __name__ == "__main__" or __name__ == "src.dynamic_programming":
+    # Generate 30 cities
+    pd.pd_runner(30)
+    # Run Dynamic Programming Bellman-Held-Karp for generated cities
+    dp_main(20)
