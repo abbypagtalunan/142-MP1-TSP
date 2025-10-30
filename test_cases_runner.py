@@ -45,8 +45,8 @@ def main():
     large_instance = [15, 20, 22, 24, 25, 27]
 
     experiments = [
-        #("EXHAUSTIVE SEARCH (DECREASE-BY-ONE)", es.es_runner, small_instance),
-        # ("GREEDY HEURISTIC", gh.gh_runner, large_instance),
+        ("EXHAUSTIVE SEARCH (DECREASE-BY-ONE)", es.es_runner, small_instance),
+        ("GREEDY HEURISTIC", gh.gh_runner, large_instance),
         ("DYNAMIC PROGRAMMING (BELLMAN-HELD-KARP)", dp.dp_runner, large_instance),
     ]
 

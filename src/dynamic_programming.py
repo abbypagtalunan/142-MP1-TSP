@@ -2,9 +2,7 @@ import time
 import matplotlib.pyplot as plt
 from src import problem_definition as pd
 
-
 # DYNAMIC PROGRAMMING BELLMAN-HELD-KARP ALGORITHM (Top-Down Recursive with Memoization) 
-
 # from Geeks for Geeks
 
 # Dynamic Programming Bellman-Held-Karp  
@@ -71,22 +69,32 @@ def calculate_tour_cost(tour, dmatrix):
         total += dmatrix[tour[i]][tour[i + 1]]
     return total
 
-def visualize_tour(coordinates, dmatrix, tour):
+def visualize_tour(coordinates, dmatrix, tour, show_labels=True):
     plt.figure(figsize=(8, 8))
     n = len(coordinates)
 
-    for i in range(len(tour) - 1):
+    # Highlight the tour edges in orange with weights
+    for i in range(len(tour)):
         city1 = tour[i]
-        city2 = tour[i + 1]
+        city2 = tour[(i + 1) % n]
         x1, y1 = coordinates[city1]
         x2, y2 = coordinates[city2]
-        plt.plot([x1, x2], [y1, y2], 'orange', linewidth=2, zorder=2)
 
+        plt.plot([x1, x2], [y1, y2], 'orange', linewidth=2, zorder=2)
+        if show_labels:
+            mid_x = (x1 + x2) / 2
+            mid_y = (y1 + y2) / 2
+            weight = dmatrix[city1, city2]
+            plt.text(mid_x, mid_y, str(weight), fontsize=7, color='darkgreen')
+
+    # Plot and label city points
     plt.scatter(coordinates[:, 0], coordinates[:, 1], color='darkgreen', zorder=3)
     for i, (x, y) in enumerate(coordinates):
         plt.text(x + 1, y + 1, f"{i}", fontsize=10, color='black')
 
-    plt.title(f"Best TSP Tour by DP-BHK (Cost: {calculate_tour_cost(tour, dmatrix)})")
+    # Compute total tour cost
+    total_cost = sum(dmatrix[tour[i], tour[(i + 1) % n]] for i in range(len(tour)))
+    plt.title(f"Best TSP Tour by DP-BHK (Total Cost: {total_cost})", fontsize=12)
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.grid(True)

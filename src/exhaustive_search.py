@@ -49,25 +49,32 @@ def exhaustive_tsp_decrease_by_one(distance_matrix):
 
     return best_tour, best_cost
 
-# Visualization of the best tour
-def visualize_tour(coordinates, distance_matrix, tour):
+import matplotlib.pyplot as plt
+
+def visualize_tour(coordinates, distance_matrix, tour, show_labels=True):
     plt.figure(figsize=(8, 8))
     n = len(coordinates)
 
-    # Draw edges of best tour
     for i in range(len(tour)):
         city1 = tour[i]
-        city2 = tour[(i + 1) % n]
+        city2 = tour[(i + 1) % n] 
         x1, y1 = coordinates[city1]
         x2, y2 = coordinates[city2]
+        weight = distance_matrix[city1, city2]
+
         plt.plot([x1, x2], [y1, y2], 'orange', linewidth=2, zorder=2)
+        if show_labels:
+            mid_x = (x1 + x2) / 2
+            mid_y = (y1 + y2) / 2
+            plt.text(mid_x, mid_y, str(weight), fontsize=7, color='darkgreen')
 
     # Plot city points
     plt.scatter(coordinates[:, 0], coordinates[:, 1], color='darkgreen', zorder=3)
     for i, (x, y) in enumerate(coordinates):
         plt.text(x + 1, y + 1, f"{i}", fontsize=10, color='black')
 
-    plt.title(f"Best TSP Tour by Exhaustive Search (Cost: {calculate_tour_cost(tour, distance_matrix)})")
+    total_cost = calculate_tour_cost(tour, distance_matrix)
+    plt.title(f"Best TSP Tour by Exhaustive Search (Cost: {total_cost})", fontsize=12)
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.grid(True)
@@ -75,7 +82,7 @@ def visualize_tour(coordinates, distance_matrix, tour):
 
 # Runner function for Exhaustive Search
 def es_runner(all_coordinates, k):
-    # Use only the first k cities from the pregenerated set
+    # Use only the first k cities from the pregenerated set of 30           
     coordinates_k = all_coordinates[:k]
     distance_matrix = pd.generate_distance_matrix(coordinates_k)
     
@@ -87,14 +94,3 @@ def es_runner(all_coordinates, k):
     visualize_tour(coordinates_k, distance_matrix, best_tour)
     return elapsed_time, best_tour, best_cost
     
-    # print("\nBest Tour Found:", best_tour)
-    # print ("Minimum Tour Cost:", best_cost)
-    # print(f"Execution Time: {elapsed_time:.6f} seconds")
-    # visualize_tour(coordinates_k, distance_matrix, best_tour)
-
-# # Main execution
-# if __name__ == "__main__" or __name__ == "exhaustive_search":
-#     all_coordinates = pd.pd_runner(10)
-#     # Run exhaustive search for smaller instance 
-#     es_runner(all_coordinates, 10)
-
