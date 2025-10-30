@@ -40,8 +40,6 @@ def generate_distance_matrix(coordinates):
             weight = round(calculate_euclidean_distance(coordinates[i], coordinates[j]))
             distance_matrix[i, j] = weight
             distance_matrix[j, i] = weight
-    # print("\nDistance Matrix:")
-    # print(distance_matrix)
     return distance_matrix
 
 def visualize(coordinates, distance_matrix, k=None, show_labels=True):
@@ -83,6 +81,6 @@ def pd_runner(k, all_coordinates=None):
 
     coordinates_k = all_coordinates[:k]
     distance_matrix = generate_distance_matrix(coordinates_k)
-    # visualize(coordinates_k, distance_matrix, k=k)
+    visualize(coordinates_k, distance_matrix, k=k)
 
-    return all_coordinates
+    return all_coordinates, distance_matrix

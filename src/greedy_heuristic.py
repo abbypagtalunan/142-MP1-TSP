@@ -56,7 +56,7 @@ def nearest_neighbor_path(distance_matrix: np.ndarray, start: int = 0) -> Tuple[
 
 
 # --- Plot (uses raw coordinates from pd) ---
-def plot_path(coords: np.ndarray, path: List[int]) -> None:
+def visualize_tour(coords: np.ndarray, path: List[int]) -> None:
     x = [coords[i, 0] for i in path] + [coords[path[0], 0]]
     y = [coords[i, 1] for i in path] + [coords[path[0], 1]]
 
@@ -64,7 +64,7 @@ def plot_path(coords: np.ndarray, path: List[int]) -> None:
     ax.plot(x, y, '-o', linewidth=2)
     for i, (px, py) in enumerate(coords):
         ax.text(px + 1, py + 1, f"{i}", fontsize=9)
-    ax.set_title('Path by Nearest Neighbor')
+    ax.set_title('Best TSP Tour Path by GH Nearest Neighbor')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.grid(True)
@@ -84,17 +84,5 @@ def gh_runner(all_coordinates: np.ndarray, k: int, n_cities: int = 30, start: in
     end_time = time.perf_counter()
     elapsed_time = end_time - start_time
 
-    # print("\n--- Nearest-Neighbor TSP ---")
-    # print(f"Number of cities: {n_cities}")
-    # print(f"Start city: {start}")
-    # print(f"Path (visit order): {path}")
-    # print(f"Total tour length (incl. return): {total_cost:.4f}")
-    # print(f"Execution Time: {elapsed_time:.6f} seconds")
-    plot_path(coordinates_k, path)
-
+    visualize_tour(coordinates_k, path)
     return elapsed_time, total_cost, path
-
-
-# if __name__ == "__main__":
-#     all_coordinates = pd.pd_runner(30)  # Visualize 30 cities
-#     gh_runner(all_coordinates, k=30, start=0)

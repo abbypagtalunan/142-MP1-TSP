@@ -67,7 +67,7 @@ def visualize_tour(coordinates, distance_matrix, tour):
     for i, (x, y) in enumerate(coordinates):
         plt.text(x + 1, y + 1, f"{i}", fontsize=10, color='black')
 
-    plt.title(f"Best TSP Tour (Cost: {calculate_tour_cost(tour, distance_matrix)})")
+    plt.title(f"Best TSP Tour by Exhaustive Search (Cost: {calculate_tour_cost(tour, distance_matrix)})")
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.grid(True)
@@ -84,6 +84,7 @@ def es_runner(all_coordinates, k):
     end_time = time.perf_counter()
     elapsed_time = end_time - start_time
 
+    visualize_tour(coordinates_k, distance_matrix, best_tour)
     return elapsed_time, best_tour, best_cost
     
     # print("\nBest Tour Found:", best_tour)

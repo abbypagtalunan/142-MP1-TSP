@@ -86,7 +86,7 @@ def visualize_tour(coordinates, dmatrix, tour):
     for i, (x, y) in enumerate(coordinates):
         plt.text(x + 1, y + 1, f"{i}", fontsize=10, color='black')
 
-    plt.title(f"Best TSP Tour (Cost: {calculate_tour_cost(tour, dmatrix)})")
+    plt.title(f"Best TSP Tour by DP-BHK (Cost: {calculate_tour_cost(tour, dmatrix)})")
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.grid(True)
@@ -101,18 +101,7 @@ def dp_runner(all_coordinates, k):
     end_time = time.perf_counter()
     elapsed_time = end_time - start_time
 
-    # print("\nBest Tour Found:", best_tour)
-    # print ("Minimum Tour Cost:", best_cost)
-    # print(f"Execution Time: {elapsed_time:.6f} seconds")
-    # visualize_tour(all_coordinates, distance_matrix, best_tour)
-
+    visualize_tour(coordinates_k, distance_matrix, best_tour)
     return elapsed_time, best_tour, best_cost
 
-
-# Main execution
-# if __name__ == "__main__" or __name__ == "src.dynamic_programming":
-#     # Generate 30 cities
-#     all_coordinates = pd.pd_runner(30)
-#     # Run Dynamic Programming Bellman-Held-Karp for generated cities
-#     dp_runner(all_coordinates, 30)
 
