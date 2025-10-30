@@ -9,10 +9,10 @@ def generate_coordinates(n_cities=30, grid_size=100, seed=1):
     """
     np.random.seed(seed)
     coordinates = np.random.randint(-50, 50, size=(n_cities, 2))
-    print(f"\nGenerated {n_cities} cities in a {grid_size}x{grid_size} grid")
-    for i in range(n_cities):
-        x, y = coordinates[i]
-        print(f"  City {i}: x = {x:3d}, y = {y:3d}")   
+    # print(f"\nGenerated {n_cities} cities in a {grid_size}x{grid_size} grid")
+    # for i in range(n_cities):
+    #     x, y = coordinates[i]
+    #     print(f"  City {i}: x = {x:3d}, y = {y:3d}")   
     return coordinates
 
 # STEP 2: CALCULATE EUCLIDEAN DISTANCE BETWEEN TWO CITIES
@@ -40,8 +40,8 @@ def generate_distance_matrix(coordinates):
             weight = round(calculate_euclidean_distance(coordinates[i], coordinates[j]))
             distance_matrix[i, j] = weight
             distance_matrix[j, i] = weight
-    print("\nDistance Matrix:")
-    print(distance_matrix)
+    # print("\nDistance Matrix:")
+    # print(distance_matrix)
     return distance_matrix
 
 def visualize(coordinates, distance_matrix, k=None, show_labels=True):
@@ -83,6 +83,6 @@ def pd_runner(k, all_coordinates=None):
 
     coordinates_k = all_coordinates[:k]
     distance_matrix = generate_distance_matrix(coordinates_k)
-    visualize(coordinates_k, distance_matrix, k=k)
+    # visualize(coordinates_k, distance_matrix, k=k)
 
     return all_coordinates

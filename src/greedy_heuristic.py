@@ -84,16 +84,17 @@ def gh_runner(all_coordinates: np.ndarray, k: int, n_cities: int = 30, start: in
     end_time = time.perf_counter()
     elapsed_time = end_time - start_time
 
-
-    print("\n--- Nearest-Neighbor TSP ---")
-    print(f"Number of cities: {n_cities}")
-    print(f"Start city: {start}")
-    print(f"Path (visit order): {path}")
-    print(f"Total tour length (incl. return): {total_cost:.4f}")
-    print(f"Execution Time: {elapsed_time:.6f} seconds")
+    # print("\n--- Nearest-Neighbor TSP ---")
+    # print(f"Number of cities: {n_cities}")
+    # print(f"Start city: {start}")
+    # print(f"Path (visit order): {path}")
+    # print(f"Total tour length (incl. return): {total_cost:.4f}")
+    # print(f"Execution Time: {elapsed_time:.6f} seconds")
     plot_path(coordinates_k, path)
 
+    return elapsed_time, total_cost, path
 
-if __name__ == "__main__":
-    all_coordinates = pd.pd_runner(30)  # Visualize 30 cities
-    gh_runner(all_coordinates, k=30, start=0)
+
+# if __name__ == "__main__":
+#     all_coordinates = pd.pd_runner(30)  # Visualize 30 cities
+#     gh_runner(all_coordinates, k=30, start=0)
