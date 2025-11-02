@@ -13,12 +13,6 @@ from src import problem_definition as pd
 from typing import List, Optional
 
 # https://github.com/mahmoud-mohsen97/Travelling-salesman-problem-using-some-Random-Search-Algorithms.git
-# --- Distance helpers (kept for clarity; pd handles matrix creation) ---
-def calculate_distance(p1: Tuple[int, int], p2: Tuple[int, int]) -> int:
-    x1, y1 = p1
-    x2, y2 = p2
-    return int(round(math.hypot(x2 - x1, y2 - y1)))
-
 # --- Nearest Neighbor core
 def get_nearest_neighbor(city: int, matrix: np.ndarray, visited: set[int]) -> Tuple[int, int]:
     n = matrix.shape[0]
@@ -55,31 +49,55 @@ def nearest_neighbor_path(distance_matrix: np.ndarray, start: int = 0) -> Tuple[
     total_cost += int(distance_matrix[cur, start])
     return path, total_cost
 
-def visualize_tour(coords: np.ndarray, path: List[int], dmatrix: Optional[np.ndarray] = None, show_labels: bool = True) -> None:
+def visualize_tour(
+    coords: np.ndarray,
+    path: List[int],
+    dmatrix: Optional[np.ndarray] = None,
+    show_labels: bool = True
+) -> None:
     fig, ax = plt.subplots(figsize=(7, 7))
-    for i in range(len(path)):
+
+    total_cost = 0
+
+    n = len(path)
+    for i in range(n):
         city1 = path[i]
-        city2 = path[(i + 1) % len(path)]
+        city2 = path[(i + 1) % n]  # closes the tour
         x1, y1 = coords[city1]
         x2, y2 = coords[city2]
-        ax.plot([int(x1), int(x2)], [int(y1), int(y2)], color='orange', linewidth=2, zorder=3)
 
-        if show_labels and dmatrix is not None:
-            mid_x = int((x1 + x2) / 2)
-            mid_y = int((y1 + y2) / 2)
-            weight = int(dmatrix[city1, city2])
-            ax.text(mid_x, mid_y, str(weight), fontsize=7, color='darkgreen')
+        # edge weight (prefer provided distance matrix)
+        if dmatrix is not None:
+            w = int(dmatrix[city1, city2])
+        else:
+            # fallback: Euclidean rounded to nearest int
+            w = int(round(math.hypot(x2 - x1, y2 - y1)))
 
+        total_cost += w
+
+        # draw edge
+        ax.plot([int(x1), int(x2)], [int(y1), int(y2)],
+                color='orange', linewidth=2, zorder=3)
+
+        # edge-label at midpoint
+        if show_labels:
+            mid_x = (x1 + x2) / 2
+            mid_y = (y1 + y2) / 2
+            ax.text(int(mid_x), int(mid_y), str(w),
+                    fontsize=7, color='darkgreen')
+
+    # draw cities + ids
     ax.scatter(coords[:, 0], coords[:, 1], color='darkgreen', zorder=4)
-    for i, (px, py) in enumerate(coords):
-        ax.text(int(px) + 1, int(py) + 1, f"{i}", fontsize=10, color='black')
+    for idx, (px, py) in enumerate(coords):
+        ax.text(int(px) + 1, int(py) + 1, f"{idx}", fontsize=10, color='black')
 
-    ax.set_title('Best TSP Tour Path by GH Nearest Neighbor')
+    ax.set_title(f'Best TSP Tour Path by GH Nearest Neighbor (Total Cost: {total_cost})')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.grid(True)
     plt.tight_layout()
     plt.show()
+
 
 def gh_runner(all_coordinates: np.ndarray, k: int, n_cities: int = 30, start: int = 0) -> None:
     """
